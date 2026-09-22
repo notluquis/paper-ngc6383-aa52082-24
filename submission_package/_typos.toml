@@ -8,6 +8,12 @@
 # ANID Agencia Nacional de Investigacion y Desarrollo, the Chilean funding agency named in
 #      the acknowledgements. typos reads it as "AND".
 
+# US English for every paper in the programme (author's decision, 2026-09-22). Without this,
+# typos accepts British forms: the sibling methods paper carried 30 unflagged. The manuscript gate's
+# `spelling` check still covers forms typos does not flag, such as "catalogue".
+[default]
+locale = "en-us"
+
 [default.extend-words]
 AAS = "AAS"
 ANID = "ANID"
