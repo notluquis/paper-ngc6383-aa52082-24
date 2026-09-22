@@ -1,0 +1,77 @@
+# CITATION.cff de este repo (paper aa52082-24, NGC 6383, A&A). No es el CITATION.cff de EROTICA
+# (github.com/notluquis/erotica), que cita el software; este cita el artículo.
+#
+# El `type` de nivel raíz se omite a propósito: el schema de CFF 1.2.0 sólo admite "software" o
+# "dataset" ahí, y ninguno de los dos describe bien un repo cuyo contenido es la fuente de un
+# paper aceptado -- se deja sin declarar (el default del schema es "software", pero eso es un
+# default del formato, no una afirmación hecha acá) y la cita real vive en `preferred-citation`.
+#
+# `status` en `preferred-citation` usa el enum de CFF 1.2.0, que NO incluye "accepted": los
+# valores válidos son abstract / advance-online / in-preparation / in-press / preprint /
+# submitted. Un paper aceptado y en camino a publicación es "in-press" en ese vocabulario; la
+# fecha real de aceptación (2026-09-15) va en `notes`, que sí es texto libre.
+#
+# Verificado 2026-09-21 contra
+# https://raw.githubusercontent.com/citation-file-format/citation-file-format/main/schema.json
+# (draft-07 JSON Schema de CFF 1.2.0) con jsonschema de Python -- cffconvert no está instalado en
+# esta máquina.
+cff-version: 1.2.0
+message: "Si usas este paper o sus datos, cítalo con estos metadatos."
+title: "Characterizing NGC 6383: A study of fundamental properties, pre-main sequence stars, mass segregation, and age using Gaia DR3 and 2MASS data"
+authors:
+  - family-names: "Pulgar-Escobar"
+    given-names: "L. M."
+    affiliation: "Departamento de Astronomía, Universidad de Concepción, Chile"
+    orcid: "https://orcid.org/0009-0008-4359-2444"
+  - family-names: "Henríquez-Salgado"
+    given-names: "N. A."
+    affiliation: "Departamento de Astronomía, Universidad de Concepción, Chile"
+    # Sin ORCID: no aparece en erotica/CITATION.cff ni en el .tex aceptado -- no se inventa.
+  - family-names: "Mennickent"
+    given-names: "R. E."
+    affiliation: "Departamento de Astronomía, Universidad de Concepción, Chile"
+    # Sin ORCID: idem.
+  - family-names: "Cerulo"
+    given-names: "Pierluigi"
+    affiliation: "Departamento de Ingeniería Informática y Ciencias de la Computación, Universidad de Concepción, Chile"
+    # Sin ORCID: idem.
+identifiers:
+  - type: other
+    value: "aa52082-24"
+    description: "A&A manuscript number"
+  - type: doi
+    value: "10.48550/arXiv.2405.09145"
+    description: "arXiv preprint, v1 = round-1 version"
+  # TODO al publicar: DOI del articulo (patron esperado 10.1051/0004-6361/202452082, sin confirmar)
+  # - type: doi
+  #   value: "10.1051/0004-6361/202452082"
+  #   description: "A&A article DOI"
+  # TODO al publicar: bibcode ADS
+  # - type: other
+  #   value: "<bibcode ADS>"
+  #   description: "ADS bibcode"
+  # TODO al publicar: catalogo CDS
+  # - type: other
+  #   value: "J/A+A/..."
+  #   description: "CDS catalogue designation"
+  # TODO al publicar: DOI de Zenodo de ESTE repo (no el de erotica)
+  # - type: doi
+  #   value: "10.5281/zenodo.<pendiente>"
+  #   description: "Zenodo DOI for this repository's release"
+preferred-citation:
+  type: article
+  title: "Characterizing NGC 6383: A study of fundamental properties, pre-main sequence stars, mass segregation, and age using Gaia DR3 and 2MASS data"
+  authors:
+    - family-names: "Pulgar-Escobar"
+      given-names: "L. M."
+      orcid: "https://orcid.org/0009-0008-4359-2444"
+    - family-names: "Henríquez-Salgado"
+      given-names: "N. A."
+    - family-names: "Mennickent"
+      given-names: "R. E."
+    - family-names: "Cerulo"
+      given-names: "Pierluigi"
+  journal: "Astronomy & Astrophysics"
+  status: "in-press"
+  year: 2026
+  notes: "Aceptado 2026-09-15. DOI del articulo pendiente (patron esperado 10.1051/0004-6361/202452082, sin confirmar)."

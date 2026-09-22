@@ -1,0 +1,82 @@
+# El paper vivía bajo `data/` dentro de erotica, donde `.pre-commit-config.yaml` excluye
+# `^(data/...)` porque `data/` es data -- así que no tuvo CI propia hasta 2026-08-17, y cada
+# chequeo de consistencia se corrió a mano hasta entonces. Extraído a este repo el 2026-09-21
+# (ver provenance/erotica-commit-map.txt); acá el paper vive en la raíz, así que este workflow
+# ya no lleva el prefijo `data/test/NGC6383/comments_paper/` que tenía en erotica.
+name: Manuscript
+
+on:
+  push:
+    paths:
+      - '**'
+  pull_request:
+    paths:
+      - '**'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  gate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262  # v4
+        with:
+          persist-credentials: false
+
+      - name: Install TeX Live, the checkers and latexdiff
+        run: |
+          set -euo pipefail
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends \
+            texlive-latex-recommended texlive-latex-extra texlive-fonts-recommended \
+            texlive-science latexmk latexdiff chktex lacheck poppler-utils
+
+      - name: Install typos
+        uses: crate-ci/typos@1a51d4b5a03bb97576af186c813af67e9137ba7c  # master
+        with:
+          files: submission_package
+          config: submission_package/_typos.toml
+
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065  # v5
+        with:
+          python-version: '3.13'
+
+      # tools/manuscript_gate.py se vendorizó desde erotica (ver tools/VENDORED.toml, commit +
+      # sha256 declarados). Este paso falla si el fichero se editó sin actualizar esa declaración.
+      - name: El motor del gate vendorizado no se movió de su commit declarado
+        run: python3 tools/check_vendored.py
+
+      # El quick no necesita correr LaTeX y es el que caza la clase de deriva: una carta, un
+      # ReadMe o una nota del grafo de conocimiento diciendo algo que el manuscrito ya no dice.
+      - name: Consistency gate
+        working-directory: submission_package
+        run: python3 gate.py --quick --allow-skips
+
+      - name: Full gate, including both builds and the standalone zip
+        working-directory: submission_package
+        run: python3 gate.py --allow-skips
+
+      # Corre el gate contra si mismo: que --quick no bendiga, que una omision no salga 0 y que
+      # --allow-skips sea lo unico que la perdona.
+      - name: El gate cumple lo que promete de si mismo
+        working-directory: submission_package
+        run: python3 test_gate_behaviour.py
+
+      # La otra mitad: cada check, roto a proposito sobre una copia del arbol, se pone rojo.
+      - name: Cada check del gate puede ponerse rojo
+        working-directory: submission_package
+        run: python3 test_gate_mutations.py --allow-skips
+
+      # Los PDF que se publican son los que ESTA corrida construyo, en _gate_build/.
+      - name: Keep the built PDFs for inspection
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02  # v4
+        with:
+          name: manuscript-pdfs
+          path: |
+            submission_package/clean_source/_gate_build/aa52082-24.pdf
+            submission_package/marked_changes/_gate_build/aanda_marked.pdf
+          if-no-files-found: warn

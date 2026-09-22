@@ -1,0 +1,56 @@
+# Repo del paper P01 (A&A aa52082-24, NGC 6383), extraído de erotica en `p01-pre-extraction`
+# (ver provenance/erotica-commit-map.txt). Estas reglas son las de `erotica/.gitignore` que
+# aplicaban bajo `data/test/NGC6383/comments_paper/`, reescritas sin ese prefijo porque acá el
+# paper vive en la raíz.
+
+# ── Python ───────────────────────────────────────────────────────────────────
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.pytest_cache/
+.ruff_cache/
+
+# ── macOS ─────────────────────────────────────────────────────────────────────
+.DS_Store
+**/.DS_Store
+
+# ── LaTeX compilation artifacts ───────────────────────────────────────────────
+*.aux
+*.bbl
+*.blg
+*.log
+*.out
+*.toc
+*.fls
+*.fdb_latexmk
+*.synctex.gz
+*.synctex(busy)
+*.lof
+*.lot
+*.loe
+*.nav
+*.snm
+*.vrb
+
+# El gate construye los PDF acá en vez de encima de los trackeados (ver submission_package/gate.py
+# vía tools/manuscript_gate.py, BUILD_DIR).
+_gate_build/
+
+# --- artefactos voluminosos/regenerables del paper (mismo criterio que erotica, slim 2026-07-19) ---
+_legacy/
+# `_legacy/cds_superseded/cds.zip` y `_legacy/cds_round2_submitted/cds.zip` son la excepción y
+# quedan trackeados a la fuerza (`git add -f`), heredado tal cual de erotica: git no desciende a un
+# directorio ignorado, así que un `!` sobre un fichero de adentro no hace nada y sólo aparenta
+# hacerlo. `cds_round2_submitted/cds.zip` es la línea base de lo que NESTOR tuvo desde la ronda 2;
+# el gate la usa para comprobar que la carta declara los cambios del paquete CDS.
+6383_old_paper/
+submission_package/clean_source.zip
+submission_package/aa52082-24_source.zip
+# `aa52082-24_cds_table2.zip` NO estaba ignorado en erotica (estaba `??` sin regla, probablemente
+# un descuido tras el renombre de `aa52082-24_cds_members.zip`); acá sí se ignora a propósito: es
+# un artefacto regenerable que el gate necesita localmente, igual que `aa52082-24_source.zip`.
+submission_package/aa52082-24_cds_table2.zip
+
+radius_robustness/generated/
+clustering_audit/generated/

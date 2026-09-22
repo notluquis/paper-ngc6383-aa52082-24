@@ -1,0 +1,10 @@
+# Ficheros de otro repo copiados acá tal cual, no cargados como submódulo (un submódulo del
+# monorepo de erotica arrastraría ~306 MB de historia sin filtrar). `tools/check_vendored.py`
+# recalcula el sha256 en CI y falla si el fichero se editó sin actualizar esta declaración.
+
+[[file]]
+path = "tools/manuscript_gate.py"
+origin = "github.com/notluquis/erotica"
+origin_path = "tools/manuscript_gate.py"
+commit = "b3386f2d62b15d7b074ec53b905b2273a56cd23b"
+sha256 = "61bed38c1767942b142e6b031039dafad9933559967222919d76fe813c087dbb"
