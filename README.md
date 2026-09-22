@@ -70,6 +70,21 @@ python3 test_gate_mutations.py --allow-skips   # cada check, roto a propósito, 
 del programa, que no existe fuera de la máquina del autor ni en CI -- ese único check se omite, no
 falla. El mismo gate corre en GitHub Actions (`.github/workflows/manuscript.yml`).
 
+**El gate completo (`gate.py` sin `--quick`) necesita un `.bbl` real en `clean_source/`.** El
+check "el zip enviado compila solo" compara cada fichero de `aa52082-24_source.zip` byte a byte
+contra `clean_source/`, y el zip trae `aa52082-24.bbl` -- un artefacto de compilación,
+gitignorado, que un checkout limpio no tiene. En un árbol recién clonado con el zip copiado (ver
+"Qué no viene acá"), ese check falla con "aa52082-24.bbl no existe en clean_source" hasta que
+compiles una vez de más en el sitio real:
+
+```bash
+cd submission_package/clean_source && latexmk -pdf -bibtex -interaction=nonstopmode aa52082-24.tex
+```
+
+En CI esto no aplica: el zip está gitignorado, así que el checkout de GitHub Actions no lo trae y
+el check se omite (`Skipped`) en vez de fallar -- el paquete que se sube se arma y valida en la
+máquina del autor, donde el zip sí existe localmente.
+
 ## De dónde viene
 
 Extraído de `github.com/notluquis/erotica` (rama `dev`, tag `p01-pre-extraction` =
