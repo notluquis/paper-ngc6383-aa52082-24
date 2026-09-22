@@ -15,6 +15,11 @@ What did NOT move: the four checks that only make sense for NGC 6383 (Table 1's 
 consistency, the two literature-table cross-checks, the catalogue-derived numbers) stay in
 that paper's own `gate_local.py`, loaded through the `local` key in its toml.
 
+This is the canonical copy. The NGC 6383 paper repo (`paper-ngc6383-aa52082-24`, extracted
+2026-09-22) vendors a copy of this file verbatim, pinned by commit + sha256 in its own
+`tools/VENDORED.toml` -- editing this engine here does not update that copy until it is
+re-vendored on purpose.
+
 Usage (from a paper's own `gate.py` shim, never by running this file directly)
 -------------------------------------------------------------------------------
     import manuscript_gate as mg
@@ -649,7 +654,10 @@ def c_cds():
     if len(cols) > 1:
         problems.append(f"columna Label desalineada: {sorted(cols)}")
     for a, b, lab, expl, _ in rows:
-        nulls = sum(1 for d in dat if d[a - 1 : b].strip() == "...")
+        # Nulo = campo en blanco (el estandar del CDS: '?' en la explicacion) o '...' (lo que usaba
+        # aa52082-24 hasta 2026-09-22, cuando el validador del upload de VizieR lo rechazo en F8.4
+        # con "Bad decimal point").
+        nulls = sum(1 for d in dat if d[a - 1 : b].strip() in ("", "..."))
         if bool(nulls) != expl.lstrip().startswith("?"):
             problems.append(f"{lab}: {nulls} nulos, marca '?' = {expl.lstrip()[:1]!r}")
     return (
@@ -814,9 +822,15 @@ def c_build():
         # El clean sigue siendo necesario -- sin el, c_overfull y c_manifest_pages podrian leer el
         # log de una corrida anterior -- pero ahora solo borra el directorio de build.
         run(["latexmk", "-C", f"-outdir={BUILD_DIR}", stem], cwd=tex.parent)
+        # `$bibtex_fudge=0`: bibtex corre desde el directorio del .tex, no desde BUILD_DIR. Con el
+        # default, `\bibliography{methods,../paper}` de P02 se resolvia relativo a `_gate_build/` y
+        # daba 2 citas indefinidas que un build directo no tiene (medido 2026-09-22; ni BIBINPUTS
+        # ni -auxdir lo arreglan: kpathsea no busca rutas explicitamente relativas).
         run(
             [
                 "latexmk",
+                "-e",
+                "$bibtex_fudge=0",
                 "-pdf",
                 "-bibtex",
                 "-interaction=nonstopmode",

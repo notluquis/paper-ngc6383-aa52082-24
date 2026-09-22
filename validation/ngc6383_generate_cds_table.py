@@ -165,7 +165,8 @@ def _format_cds_value(value: object, width: int, precision: int) -> str:
         text = str(value)
         return text[:width].rjust(width)
     if not np.isfinite(val):
-        return "...".rjust(width)
+        # Nulo = campo en blanco, el estandar del CDS (el validador de VizieR rechazo "..." en F8.4).
+        return " " * width
     return f"{val:>{width}.{precision}f}"
 
 
@@ -222,8 +223,8 @@ def _write_cds_readme(table: Table, output_dir: Path) -> None:
         "  cross-matched to 2MASS where available. Gaia parallaxes were corrected for",
         "  the DR3 zero point, and proper motions for bright-source frame rotation",
         "  where applicable. The preprocessing retained sources with astrometric",
-        "  fidelity_v2>0.5. Missing photometric or Sagitta values are encoded as",
-        "  '...' in the fixed-width table.",
+        "  fidelity_v2>0.5. Missing photometric or Sagitta values are left blank in",
+        "  the fixed-width table.",
         "",
         "File Summary:",
         "--------------------------------------------------------------------------------",
@@ -267,7 +268,7 @@ def _write_validation_manifest(table: Table, output_dir: Path) -> None:
         "reference_rows": int(np.count_nonzero(table["Ref"])),
         "selection": "post-parallax-clipping candidates with pMember > 0.5",
         "reference_selection": "Ref=1 if pMember >= 0.6",
-        "missing_value": "...",
+        "missing_value": "",
         "fixed_width_lrecl": _cds_column_positions(table.colnames)[-1][1],
         "columns": table.colnames,
     }

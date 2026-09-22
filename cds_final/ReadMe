@@ -26,7 +26,7 @@ Description:
   cross-matched to 2MASS where available. Gaia parallaxes were corrected for
   the DR3 zero point, and proper motions for bright-source frame rotation where
   applicable. The preprocessing retained sources with astrometric
-  fidelity_v2>0.5. Missing 2MASS photometric values are encoded as '...' in the
+  fidelity_v2>0.5. Missing 2MASS photometric values are left blank in the
   fixed-width table.
 
 Objects:
