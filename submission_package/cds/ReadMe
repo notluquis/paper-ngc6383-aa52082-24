@@ -22,12 +22,19 @@ Abstract:
   main cluster parameters.
 
 Description:
-  The catalogue was produced from a Gaia DR3 cone search centred on NGC 6383,
+  The catalog was produced from a Gaia DR3 cone search centered on NGC 6383,
   cross-matched to 2MASS where available. Gaia parallaxes were corrected for
   the DR3 zero point, and proper motions for bright-source frame rotation where
   applicable. The preprocessing retained sources with astrometric
   fidelity_v2>0.5. Missing 2MASS photometric values are encoded as '...' in the
   fixed-width table.
+
+Objects:
+    -----------------------------------------
+       RA   (2000)   DE    Designation(s)
+    -----------------------------------------
+    17 34 43.9 -32 35 02   NGC 6383
+    -----------------------------------------
 
 File Summary:
 -------------------------------------------------------------------------------
@@ -37,6 +44,10 @@ ReadMe                   80        .  This file
 table2.dat              213      321  Full version of Table 2 (likely
                                       member candidates)
 -------------------------------------------------------------------------------
+
+See also:
+   I/355 : Gaia DR3 Part 1. Main source (Gaia Collaboration, 2022)
+  II/246 : 2MASS All-Sky Catalog of Point Sources (Cutri+ 2003)
 
 Byte-by-byte Description of file: table2.dat
 -------------------------------------------------------------------------------
@@ -90,5 +101,7 @@ References:
   Rybizki J. et al., 2022MNRAS.510.2597R  Astrometric fidelity
   McBride A. et al., 2021AJ....162..282M  Sagitta
   McInnes L. et al., 2017JOSS....2..205M  HDBSCAN
+
+License: CC-BY-4.0
 ===============================================================================
 (End)                                    L. Pulgar-Escobar [UdeC]  15-Sep-2026
