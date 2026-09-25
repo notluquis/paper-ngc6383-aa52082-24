@@ -90,7 +90,7 @@ def c_table1():
     # row. Guarding the interval and not the sigma would strand it on the next refit, which is the
     # partial propagation this whole check exists for.
     s = re.search(r"places the adopted age only \$([\d.]+)\\sigma\$ above", tex)
-    age = re.search(r"mode age \$t_\{\\mathrm\{age\}\} = ([\d.]+)\\,\\mathrm\{Myr\}\$", tex)
+    age = re.search(r"mode age,? \$t_\{\\mathrm\{age\}\} = ([\d.]+)\\,\\mathrm\{Myr\}\$", tex)
     if s is None or age is None:
         bad.append("no encuentro la separacion en sigma o la edad modal en Sect. 7")
     else:
