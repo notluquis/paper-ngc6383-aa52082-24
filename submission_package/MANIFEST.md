@@ -148,6 +148,18 @@ to prevent, not something to leave sitting in the tree "just in case". `aa52082-
 stays; it is still the local proof copy for the one document that is still uploaded.
 (Last full rebuild: 2026-08-17, co-author pass: 41 annotations from P. Cerulo applied - 24 figure-caption cuts, 11 wording fixes, the Table 1 caption moved to \tablefoot per A&A house style - plus four corrections to the Kalari 2019 comparison found while re-checking that source, including the adopted-distance systematic the previous version omitted. A later point-by-point re-read of the referee report found three internal contradictions, now fixed: the Table 1 \tablefoot scoped to the five rows whose intervals are not posterior widths, the 1.2 T_max prior collision stated explicitly, and the R17 element (i) no longer claiming a converged isochrone posterior; Appendix D also gained the argument for why R_t survives the contamination that biases R_c, and a \clearpage so Fig. D.1, the load-bearing evidence for R11, now sits on the same page as its text (p. 25) instead of five pages later. Both letters were then cross-checked against the manuscript and realigned, see CHANGES.md Sect. 49; a further pass on 2026-08-17 (Sect. 70) realigned R11 and the Spitzer attribution in the response letter, and added five gate checks after finding the marked PDF, the source zip and the sent PDFs all stale or broken while the gate was green. See referee_round2/PIERLUIGI_REVIEW_TRIAGE.md. Round-2 restructure + R1-R17 fixes are in CHANGES.md §42. latexdiff baseline = round-1 submitted version, so the marked PDF still shows only round-2 changes.)
 
+**2026-09-25, A&A language edit (branch `language-edit`).** The source is now the language editor's
+`aa52082-24corr.tex`, committed unchanged first and then edited step by step on top: her three
+`\LEt` notes removed, her three instructions applied to the text she edited non-exhaustively, a few
+of her edits reworded where they shifted the meaning, and the three ranges she wrote with a hyphen
+returned to an en dash (author's decision). Each change is listed in
+`language_edit_changes.md`; her notes are in `language_edit_notes.md`. No number, equation,
+citation, or cross-reference changed. Her text alone pushed Table 1 and Table 2 past the references
+(26 pages); `\begin{table}[!tbp]` on Table 1 puts every float back on the page it had in the accepted
+version, and the count back to 25 pages. The
+marked PDF for the editor (our changes in red over her version) is
+`aa52082-24_language_edit_marked.pdf`, built from `marked_changes/language_edit/`.
+
 ## FILES TO SEND — mapped to the NESTOR upload slots
 (Round-1 letters archived in `letters/round1_archive/`, do NOT send.)
 
@@ -157,6 +169,7 @@ PDF from the zip itself, so `aa52082-24_revised_clean.pdf` is **not uploaded** �
 | NESTOR slot | File | Notes |
 |---|---|---|
 | **Updated source files** (mandatory) | `aa52082-24_source.zip` | aa52082-24.tex (the only .tex), aa52082-24.bbl, cites.bib, aa.cls, aa.bst, linenoaa.sty, Figures/ (21, all used). Clean version only, per the editor's instruction. Verified to compile standalone in an empty directory: 25 pp, 0 errors, 0 undefined. |
+| **Additional file** (optional; the exact NESTOR field name is inferred from the editor's email, "additional file", and still to be confirmed on the form) | `aa52082-24_language_edit_marked.pdf` | Round of the language edit only (2026-09-25): our changes marked in red over the language editor's `corr.tex`, uploaded so she can review them, as her email asked. Not part of the source; the zip above stays clean. |
 
 **CDS deposit is no longer a NESTOR slot.** Until 2026-09-15 this table carried a "Datasets" row
 for `aa52082-24_cds_members.zip`, uploaded to NESTOR so the journal would forward it to the CDS.
