@@ -169,7 +169,7 @@ PDF from the zip itself, so `aa52082-24_revised_clean.pdf` is **not uploaded** â
 | NESTOR slot | File | Notes |
 |---|---|---|
 | **Updated source files** (mandatory) | `aa52082-24_source.zip` | aa52082-24.tex (the only .tex), aa52082-24.bbl, cites.bib, aa.cls, aa.bst, linenoaa.sty, Figures/ (21, all used). Clean version only, per the editor's instruction. Verified to compile standalone in an empty directory: 25 pp, 0 errors, 0 undefined. |
-| **Additional file** (optional) | `aa52082-24_language_edit_marked.pdf` | Round of the language edit only (2026-09-25): our changes marked in red over the language editor's `corr.tex`, uploaded so she can review them, as her email asked. Not part of the source; the zip above stays clean. |
+| **Additional file** (optional; the exact NESTOR field name is inferred from the editor's email, "additional file", and still to be confirmed on the form) | `aa52082-24_language_edit_marked.pdf` | Round of the language edit only (2026-09-25): our changes marked in red over the language editor's `corr.tex`, uploaded so she can review them, as her email asked. Not part of the source; the zip above stays clean. |
 
 **CDS deposit is no longer a NESTOR slot.** Until 2026-09-15 this table carried a "Datasets" row
 for `aa52082-24_cds_members.zip`, uploaded to NESTOR so the journal would forward it to the CDS.
