@@ -22,8 +22,15 @@ import numpy as np
 from astropy.stats import sigma_clip
 
 
-PROJECT_ROOT = Path(__file__).resolve().parents[2]
-NGC_ROOT = PROJECT_ROOT / "data" / "test" / "NGC6383"
+# The raw catalogues and the untracked radius-robustness outputs stay in the EROTICA checkout
+# (data/test/NGC6383/ is not part of this repository). This script used to live in
+# erotica/tools/validation/, where parents[2] was the EROTICA root; after the move to this repo's
+# validation/ the same expression resolved to the directory ABOVE this repo, which does not exist.
+# The EROTICA checkout is looked up as a sibling of this repo, and EROTICA_NGC6383_ROOT overrides it.
+PAPER_ROOT = Path(__file__).resolve().parents[1]
+NGC_ROOT = Path(
+    os.environ.get("EROTICA_NGC6383_ROOT", PAPER_ROOT.parent / "erotica" / "data" / "test" / "NGC6383")
+).expanduser()
 DEFAULT_OUTPUT_DIR = NGC_ROOT / "comments_paper" / "radius_robustness" / "generated"
 DEFAULT_REFERENCE_PM = (2.54, -1.71)
 
@@ -198,7 +205,10 @@ def run_radius(
 
     source = _source_for_radius(radius)
     if not source.exists():
-        raise FileNotFoundError(source)
+        raise FileNotFoundError(
+            f"{source} does not exist. Point EROTICA_NGC6383_ROOT at the EROTICA checkout's "
+            "data/test/NGC6383 directory (default: a sibling 'erotica' checkout of this repo)."
+        )
 
     good_data, bad_data, preprocessing = preprocess_source(source)
 
@@ -210,10 +220,24 @@ def run_radius(
         min_cluster_members=200,
         max_cluster_members=1000,
         select_cluster=False,
+        # The two settings below are PINNED because EROTICA changed both defaults after the
+        # submitted run (2026-08-03 and 2026-08-04). Measured on the 40 arcmin catalogue,
+        # 2026-09-25 (EROTICA docs/design-notes/decisions.md, same date):
+        #   selection: the submitted run used the then-default "max_members" (argmax of the
+        #     recovered branch size, the rule Sect. 2 of the paper describes), which picks
+        #     min_cluster_size=43. With the current default "max_persistence" alone: 51, 259
+        #     members.
+        #   approx_min_span_tree: the submitted run used hdbscan's approximate MST (the old
+        #     default). With match_reference_implementation=False the exact tree is live;
+        #     with it alone: 273, 418 members.
+        # With BOTH current defaults the sweep lands on 43 again and the 254 come back, by
+        # coincidence: the branch is 498 instead of the published 701 and pFreq moves.
+        selection="max_members",
+        approx_min_span_tree=True,
+        match_reference_implementation=False,
         hdbscan_kwargs={
             "cluster_selection_method": "leaf",
             "allow_single_cluster": True,
-            "match_reference_implementation": False,
             "core_dist_n_jobs": 1,
         },
     )

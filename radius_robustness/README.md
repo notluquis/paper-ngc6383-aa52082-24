@@ -4,14 +4,24 @@ Purpose: answer the A&A referee comment about whether the NGC 6383 conclusions
 change if the Gaia cone search is run at 50 or 60 arcmin instead of the
 submitted 40 arcmin.
 
-Run from the repository root:
+Run from the repository root, with EROTICA importable and the Gaia `zero_point`
+package installed:
 
 ```bash
-/Users/notluquis/miniforge3/envs/cosmic/bin/python tools/validation/ngc6383_radius_robustness.py
+python validation/ngc6383_radius_robustness.py --radii 40
 ```
 
-The base Python currently lacks the Gaia `zero_point` dependency; use the
-`cosmic` conda environment for full preprocessing.
+The raw cones and the generated outputs live in the EROTICA checkout, under
+`data/test/NGC6383/` (not tracked by either repository). The script looks for an
+`erotica` checkout next to this repository; set `EROTICA_NGC6383_ROOT` to that
+directory otherwise. ⚠ The default `--output-dir` is the stored artefact of the
+submitted run; pass another directory to rerun without overwriting it.
+
+The call pins `selection="max_members"` and `approx_min_span_tree=True`: EROTICA
+changed both defaults after the submitted run, and either default alone moves the
+40 arcmin result (51 or 273 as `min_cluster_size`, 259 or 418 members). With the
+pins, a rerun from the raw cone on 2026-09-25 reproduced the stored columns
+exactly and the 254 `source_id` of `cds_final/table2.dat`.
 
 By default this now writes the intermediate `Clustering` objects to:
 
@@ -25,7 +35,7 @@ regenerated without depending on old `/private/tmp` artifacts.
 To also write the large ECSV tables:
 
 ```bash
-/Users/notluquis/miniforge3/envs/cosmic/bin/python tools/validation/ngc6383_radius_robustness.py --write-full-tables
+python validation/ngc6383_radius_robustness.py --write-full-tables
 ```
 
 Generated outputs go to `generated/`, which is intentionally ignored by git.
