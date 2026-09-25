@@ -2,7 +2,7 @@
 #
 # Only GitHub Actions: the repo has no Python manifest. Its tooling runs in the environment that
 # built the accepted paper, and a silent bump there would change the thing the gate certifies.
-# Security fixes arrive immediately; routine bumps are batched monthly with a cooldown, the same
+# Security fixes arrive immediately; routine bumps are checked daily, batched with a cooldown, the same
 # policy as erotica/.github/dependabot.yml.
 version: 2
 
@@ -10,7 +10,7 @@ updates:
   - package-ecosystem: github-actions
     directory: /
     schedule:
-      interval: monthly
+      interval: daily
     cooldown:
       default-days: 3
       semver-major-days: 7
