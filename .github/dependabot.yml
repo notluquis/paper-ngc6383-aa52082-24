@@ -1,0 +1,27 @@
+# Dependabot for the NGC 6383 paper (A&A aa52082-24).
+#
+# Only GitHub Actions: the repo has no Python manifest. Its tooling runs in the environment that
+# built the accepted paper, and a silent bump there would change the thing the gate certifies.
+# Security fixes arrive immediately; routine bumps are batched monthly with a cooldown, the same
+# policy as erotica/.github/dependabot.yml.
+version: 2
+
+updates:
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: monthly
+    cooldown:
+      default-days: 3
+      semver-major-days: 7
+    groups:
+      actions-security:
+        applies-to: security-updates
+        patterns: ["*"]
+      actions:
+        applies-to: version-updates
+        patterns: ["*"]
+    commit-message:
+      prefix: ci
+      include: scope
+    open-pull-requests-limit: 3
