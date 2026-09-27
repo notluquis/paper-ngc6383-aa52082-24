@@ -3,17 +3,30 @@
 from __future__ import annotations
 
 import json
+import os
+import tempfile
 from pathlib import Path
 
 import numpy as np
 from astropy.table import Table, join, vstack
 from astroquery.gaia import Gaia
 
-
-PROJECT_ROOT = Path(__file__).resolve().parents[2]
-COMMENTS_ROOT = PROJECT_ROOT / "data" / "test" / "NGC6383" / "comments_paper"
-DEFAULT_MEMBERS = COMMENTS_ROOT / "cds_final" / "ngc6383_members.ecsv"
-DEFAULT_OUTPUT_DIR = COMMENTS_ROOT / "hd159176_gaia_quality"
+# R25-05 (hub state/findings.yaml): PROJECT_ROOT = parents[2] carried the same
+# off-by-one that R25-03 fixed in ngc6383_radius_robustness.py (paper 3eef37a) --
+# it resolves one level above this repo. Unlike that script, DEFAULT_MEMBERS
+# does not need the EROTICA checkout: cds_final/ngc6383_members.ecsv is the
+# table already delivered to the CDS, and it lives at THIS repo's root (added
+# in 5a5dd20; not found under erotica's comments_paper/, checked live
+# 2026-09-27), so it resolves against PAPER_ROOT directly.
+PAPER_ROOT = Path(__file__).resolve().parents[1]
+DEFAULT_MEMBERS = PAPER_ROOT / "cds_final" / "ngc6383_members.ecsv"
+# Default output goes to a temp dir, not to this repo's hd159176_gaia_quality/,
+# which is a delivered artifact. Set P01_VALIDATION_OUT (e.g. to PAPER_ROOT) to
+# write the real destination.
+VALIDATION_OUTPUT_ROOT = Path(
+    os.environ.get("P01_VALIDATION_OUT", Path(tempfile.gettempdir()) / "p01-validation" / "hd159176-gaia-quality")
+).expanduser()
+DEFAULT_OUTPUT_DIR = VALIDATION_OUTPUT_ROOT / "hd159176_gaia_quality"
 
 HD159176_SOURCE_ID = 4054618559611164288
 QUALITY_COLUMNS = [
@@ -316,6 +329,7 @@ def _write_report(summary: dict[str, object], output_dir: Path) -> None:
 
 def main() -> None:
     output_dir = DEFAULT_OUTPUT_DIR
+    print(f"Writing output to {output_dir}")
     output_dir.mkdir(parents=True, exist_ok=True)
 
     context = _member_context(DEFAULT_MEMBERS)

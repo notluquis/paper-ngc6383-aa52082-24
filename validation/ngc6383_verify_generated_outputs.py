@@ -5,17 +5,38 @@ from __future__ import annotations
 import argparse
 import csv
 import json
+import os
+import tempfile
 from pathlib import Path
 from typing import Any
 
 import numpy as np
 from astropy.table import Table
 
-
-PROJECT_ROOT = Path(__file__).resolve().parents[2]
-NGC_ROOT = PROJECT_ROOT / "data" / "test" / "NGC6383"
+# R25-05 (hub state/findings.yaml): PROJECT_ROOT = parents[2] carried the same
+# off-by-one that R25-03 fixed in ngc6383_radius_robustness.py (paper 3eef37a) --
+# it resolves one level above this repo. Same mechanism: NGC_ROOT looks for a
+# sibling EROTICA checkout, EROTICA_NGC6383_ROOT overrides it. Both defaults
+# below are read-only inputs (the stored radius_robustness/clustering_audit
+# artifacts); this script does not write into either.
+PAPER_ROOT = Path(__file__).resolve().parents[1]
+NGC_ROOT = Path(
+    os.environ.get("EROTICA_NGC6383_ROOT", PAPER_ROOT.parent / "erotica" / "data" / "test" / "NGC6383")
+).expanduser()
 DEFAULT_RADIUS_DIR = NGC_ROOT / "comments_paper" / "radius_robustness" / "generated"
 DEFAULT_AUDIT_DIR = NGC_ROOT / "comments_paper" / "clustering_audit" / "generated"
+# The verification report used to be written into audit_dir, which is also an
+# input this script reads (the stored clustering_audit/generated already has a
+# verification_report.json from a real run). Writing into an input directory by
+# default is exactly the R25-05 pattern one script over, so the report gets its
+# own default: a temp dir, overridable with P01_VALIDATION_OUT. The subdirectory
+# mirrors DEFAULT_AUDIT_DIR's own suffix, so pointing P01_VALIDATION_OUT at
+# NGC_ROOT / "comments_paper" restores the original behavior of writing next to
+# the stored audit summaries.
+VALIDATION_OUTPUT_ROOT = Path(
+    os.environ.get("P01_VALIDATION_OUT", Path(tempfile.gettempdir()) / "p01-validation" / "verify-generated-outputs")
+).expanduser()
+DEFAULT_REPORT_DIR = VALIDATION_OUTPUT_ROOT / "clustering_audit" / "generated"
 
 
 def _jsonable(value: Any) -> Any:
@@ -133,6 +154,7 @@ def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--radius-dir", type=Path, default=DEFAULT_RADIUS_DIR)
     parser.add_argument("--audit-dir", type=Path, default=DEFAULT_AUDIT_DIR)
+    parser.add_argument("--report-dir", type=Path, default=DEFAULT_REPORT_DIR)
     args = parser.parse_args()
 
     radius_summaries = _load_json(args.radius_dir / "paperfaithful_radius_summary.json")
@@ -147,7 +169,9 @@ def main() -> None:
             continue
         report.append(verify_radius(item, audit_by_radius[radius], args.audit_dir))
 
-    output_path = args.audit_dir / "verification_report.json"
+    print(f"Writing report to {args.report_dir}")
+    args.report_dir.mkdir(parents=True, exist_ok=True)
+    output_path = args.report_dir / "verification_report.json"
     output_path.write_text(json.dumps(_jsonable(report), indent=2, allow_nan=False) + "\n", encoding="utf-8")
 
     failures = [item for item in report if item["status"] != "ok"]

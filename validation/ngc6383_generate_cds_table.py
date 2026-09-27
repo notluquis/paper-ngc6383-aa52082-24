@@ -4,18 +4,37 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
+import tempfile
 from pathlib import Path
 
 import numpy as np
 from astropy.table import Table, join
 
-
-PROJECT_ROOT = Path(__file__).resolve().parents[2]
-COMMENTS_ROOT = PROJECT_ROOT / "data" / "test" / "NGC6383" / "comments_paper"
+# R25-05 (hub state/findings.yaml): PROJECT_ROOT = parents[2] carried the same
+# off-by-one that R25-03 fixed in ngc6383_radius_robustness.py (paper 3eef37a) --
+# it resolves one level above this repo. Same mechanism for DEFAULT_INPUT:
+# NGC_ROOT looks for a sibling EROTICA checkout (its radius_robustness/generated/
+# is not tracked by either repo), EROTICA_NGC6383_ROOT overrides it.
+# DEFAULT_SAGITTA is different: cluster_data.ecsv lives at THIS repo's root
+# (added in 5a5dd20; not found under erotica's comments_paper/, checked live
+# 2026-09-27), so it resolves against PAPER_ROOT directly.
+PAPER_ROOT = Path(__file__).resolve().parents[1]
+NGC_ROOT = Path(
+    os.environ.get("EROTICA_NGC6383_ROOT", PAPER_ROOT.parent / "erotica" / "data" / "test" / "NGC6383")
+).expanduser()
+COMMENTS_ROOT = NGC_ROOT / "comments_paper"
 DEFAULT_INPUT = COMMENTS_ROOT / "radius_robustness" / "generated" / "40" / "paperfaithful_with_clip_flags.ecsv"
-DEFAULT_SAGITTA = COMMENTS_ROOT / "cluster_data.ecsv"
-DEFAULT_OUTPUT_DIR = COMMENTS_ROOT / "cds"
-DEFAULT_FINAL_OUTPUT_DIR = COMMENTS_ROOT / "cds_final"
+DEFAULT_SAGITTA = PAPER_ROOT / "cluster_data.ecsv"
+# Default output goes to a temp dir, not to this repo's cds/ or cds_final/: the
+# latter is the table already delivered to the CDS. Set P01_VALIDATION_OUT (e.g.
+# to PAPER_ROOT, so cds_final below lands on the delivered path) to write the
+# real destination.
+VALIDATION_OUTPUT_ROOT = Path(
+    os.environ.get("P01_VALIDATION_OUT", Path(tempfile.gettempdir()) / "p01-validation" / "generate-cds-table")
+).expanduser()
+DEFAULT_OUTPUT_DIR = VALIDATION_OUTPUT_ROOT / "cds"
+DEFAULT_FINAL_OUTPUT_DIR = VALIDATION_OUTPUT_ROOT / "cds_final"
 
 
 DESCRIPTIONS = {
@@ -298,6 +317,10 @@ def main() -> None:
     source = Table.read(args.input, format="ascii.ecsv")
     sagitta = Table.read(args.sagitta, format="ascii.ecsv")
     table = _build_member_table(source, sagitta)
+
+    print(f"Writing staging output to {args.output_dir}")
+    if args.final:
+        print(f"Writing final output to {args.final_output_dir}")
 
     args.output_dir.mkdir(parents=True, exist_ok=True)
     table.write(args.output_dir / "ngc6383_members_cds.ecsv", format="ascii.ecsv", overwrite=True)

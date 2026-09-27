@@ -43,10 +43,22 @@ import numpy as np
 # beside it so the effect of the fix on the archived runs is visible rather than inferred.
 from erotica.core.clustering import Clustering
 
-PROJECT_ROOT = Path(__file__).resolve().parents[2]
-NGC_ROOT = PROJECT_ROOT / "data" / "test" / "NGC6383"
+# R25-05 (hub state/findings.yaml): PROJECT_ROOT = parents[2] carried the same
+# off-by-one that R25-03 fixed in ngc6383_radius_robustness.py (paper 3eef37a) --
+# it resolves one level above this repo. Same mechanism: NGC_ROOT looks for a
+# sibling EROTICA checkout, EROTICA_NGC6383_ROOT overrides it.
+PAPER_ROOT = Path(__file__).resolve().parents[1]
+NGC_ROOT = Path(
+    os.environ.get("EROTICA_NGC6383_ROOT", PAPER_ROOT.parent / "erotica" / "data" / "test" / "NGC6383")
+).expanduser()
 DEFAULT_INPUT_DIR = NGC_ROOT / "comments_paper" / "radius_robustness" / "generated" / "dill"
-DEFAULT_OUTPUT_DIR = NGC_ROOT / "comments_paper" / "clustering_audit" / "generated"
+# Default output goes to a temp dir, not to the stored erotica-side
+# clustering_audit/generated. Set P01_VALIDATION_OUT (e.g. to
+# NGC_ROOT / "comments_paper") to write the real destination.
+VALIDATION_OUTPUT_ROOT = Path(
+    os.environ.get("P01_VALIDATION_OUT", Path(tempfile.gettempdir()) / "p01-validation" / "clustering-audit")
+).expanduser()
+DEFAULT_OUTPUT_DIR = VALIDATION_OUTPUT_ROOT / "clustering_audit" / "generated"
 DEFAULT_REFERENCE_PM = (2.54, -1.71)
 
 
@@ -382,6 +394,7 @@ def main() -> None:
     parser.add_argument("--reference-pmdec", type=float, default=DEFAULT_REFERENCE_PM[1])
     args = parser.parse_args()
 
+    print(f"Writing output to {args.output_dir}")
     args.output_dir.mkdir(parents=True, exist_ok=True)
     reference_pm = (args.reference_pmra, args.reference_pmdec)
     summaries = []

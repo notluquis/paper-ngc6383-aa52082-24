@@ -24,11 +24,28 @@ from astroquery.vizier import Vizier
 from scipy.interpolate import UnivariateSpline
 
 
-PROJECT_ROOT = Path(__file__).resolve().parents[2]
-COMMENTS_ROOT = PROJECT_ROOT / "data" / "test" / "NGC6383" / "comments_paper"
+# R25-05 (hub state/findings.yaml): PROJECT_ROOT = parents[2] carried the same
+# off-by-one that R25-03 fixed in ngc6383_radius_robustness.py (paper 3eef37a) --
+# it resolves one level above this repo. Same mechanism for DEFAULT_MEMBERS:
+# NGC_ROOT looks for a sibling EROTICA checkout (its radius_robustness/generated/
+# is not tracked by either repo), EROTICA_NGC6383_ROOT overrides it.
+# DEFAULT_SAGITTA is different: cluster_data.ecsv lives at THIS repo's root
+# (added in 5a5dd20; not found under erotica's comments_paper/, checked live
+# 2026-09-27), so it resolves against PAPER_ROOT directly.
+PAPER_ROOT = Path(__file__).resolve().parents[1]
+NGC_ROOT = Path(
+    os.environ.get("EROTICA_NGC6383_ROOT", PAPER_ROOT.parent / "erotica" / "data" / "test" / "NGC6383")
+).expanduser()
+COMMENTS_ROOT = NGC_ROOT / "comments_paper"
 DEFAULT_MEMBERS = COMMENTS_ROOT / "radius_robustness" / "generated" / "40" / "paperfaithful_with_clip_flags.ecsv"
-DEFAULT_SAGITTA = COMMENTS_ROOT / "cluster_data.ecsv"
-DEFAULT_OUTPUT_DIR = COMMENTS_ROOT / "rauw_halpha"
+DEFAULT_SAGITTA = PAPER_ROOT / "cluster_data.ecsv"
+# Default output goes to a temp dir, not to this repo's rauw_halpha/, which is a
+# delivered artifact. Set P01_VALIDATION_OUT (e.g. to PAPER_ROOT) to write the
+# real destination.
+VALIDATION_OUTPUT_ROOT = Path(
+    os.environ.get("P01_VALIDATION_OUT", Path(tempfile.gettempdir()) / "p01-validation" / "rauw-halpha-crossmatch")
+).expanduser()
+DEFAULT_OUTPUT_DIR = VALIDATION_OUTPUT_ROOT / "rauw_halpha"
 RAUW_CATALOG = "J/A+A/511/A25/table2"
 
 
@@ -223,6 +240,7 @@ def main() -> None:
         ),
     }
 
+    print(f"Writing output to {args.output_dir}")
     args.output_dir.mkdir(parents=True, exist_ok=True)
     output_table.write(args.output_dir / "rauw_halpha_crossmatch.csv", format="ascii.csv", overwrite=True)
     output_table.write(args.output_dir / "rauw_halpha_crossmatch.ecsv", format="ascii.ecsv", overwrite=True)
