@@ -31,7 +31,16 @@ PAPER_ROOT = Path(__file__).resolve().parents[1]
 NGC_ROOT = Path(
     os.environ.get("EROTICA_NGC6383_ROOT", PAPER_ROOT.parent / "erotica" / "data" / "test" / "NGC6383")
 ).expanduser()
-DEFAULT_OUTPUT_DIR = NGC_ROOT / "comments_paper" / "radius_robustness" / "generated"
+# Default output goes to a temp dir, not straight into erotica's comments_paper/radius_robustness/
+# generated/ -- the .dill files there are the ones clustering_audit.py reads by default (hub
+# state/findings.yaml R25-06), so a default run must not silently overwrite them. Same pattern as
+# the other five validation scripts (b8893a5): set P01_VALIDATION_OUT (e.g. to
+# NGC_ROOT / "comments_paper", the value that already reproduces their real destination) to write
+# the real one.
+VALIDATION_OUTPUT_ROOT = Path(
+    os.environ.get("P01_VALIDATION_OUT", Path(tempfile.gettempdir()) / "p01-validation" / "radius-robustness")
+).expanduser()
+DEFAULT_OUTPUT_DIR = VALIDATION_OUTPUT_ROOT / "radius_robustness" / "generated"
 DEFAULT_REFERENCE_PM = (2.54, -1.71)
 
 
@@ -332,7 +341,11 @@ def run_radius(
         dill_dir.mkdir(parents=True, exist_ok=True)
         dill_path = dill_dir / f"ngc6383_{radius}_paperfaithful.dill"
         with dill_path.open("wb") as handle:
-            dill.dump(clust, handle)
+            # protocol=5 explicit: the 4 .dill files already delivered under comments_paper/
+            # radius_robustness/generated/dill/ were re-serialized at protocol 5 (hub
+            # state/findings.yaml R25-06); a bare dill.dump() would use this environment's
+            # default (4), silently downgrading the format on the next real run.
+            dill.dump(clust, handle, protocol=5)
         summary["cluster_object"] = dill_path
 
     (radius_dir / "summary.json").write_text(
