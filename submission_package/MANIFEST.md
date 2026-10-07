@@ -11,6 +11,12 @@ Left/Right. Fig. C.3 went from `figure*` + `\sidecaption` to single column, and 
 before Fig. C.6 was removed (C.6 now `[htb]`). Cost, measured: Tables D.1-D.2 now print on p. 22,
 before Figs. C.4-C.6; restoring the barrier at the start of Appendix D brings back 25 pages with the
 gaps. Pages 1-17 have identical text (only the build date differs). Branch `layout-appendices`.
+Further variants measured the same day, none below 24 pages (total trailing blank ~0.9 page in all):
+appendix-local float fractions (no effect), the same in the preamble (moves body pages 3-17, rejected),
+`[!htb]` on the single-column appendix floats (no effect), shrinking C.1-C.5 and B.4, C.1 as a stacked
+single-column figure, and C.6 moved before C.4 (renumbers). Cause: the appendix text ends on p. 21 and
+the LaTeX kernel keeps one- and two-column figures in sequence, so the end-of-document flush cannot
+pull C.2/C.3/C.6 into the gaps. Uploaded to NESTOR 2026-10-07.
 
 Compiles to 24 pp clean / 0 errors / 0 undefined refs / 0 undefined citations. The
 clean count dropped from 30 pages to 27 in the post-acceptance pass: the three explicit `\clearpage`
