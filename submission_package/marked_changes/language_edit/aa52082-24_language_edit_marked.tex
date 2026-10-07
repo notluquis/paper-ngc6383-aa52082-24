@@ -1,7 +1,7 @@
 
 %DIF LATEXDIFF DIFFERENCE FILE
-%DIF DEL corr_noLEt.tex   Fri Sep 25 12:18:24 2026
-%DIF ADD final.tex        Fri Sep 25 12:23:19 2026
+%DIF DEL corr_noLEt.tex   Fri Sep 25 13:41:06 2026
+%DIF ADD final.tex        Wed Oct  7 19:36:08 2026
 \documentclass{aa}  
 \usepackage{graphicx}
 \usepackage{txfonts}
@@ -601,12 +601,22 @@ The condensed cluster tree (Fig.~\ref{fig:condensed_cluster_tree}) displays the 
 
 Figure~\ref{fig:pm_overview} places the selected branch in context, showing the full $40\,\mathrm{arcmin}$ preprocessed sample ($15276$ sources) labeled by HDBSCAN, both in the proper-motion plane and on the sky. In proper motion, NGC 6383 forms a compact, well-isolated over\DIFdelbegin \DIFdel{-}\DIFdelend density around $(\mu_{\alpha}^{*},\mu_{\delta})=(2.5,-1.7)\,\mathrm{mas\,yr^{-1}}$, clearly separated from the diffuse field and from the other, more dispersed HDBSCAN branches. On the sky, by contrast, the three groups overlap, with only a mild central concentration of the cluster members. This confirms that the membership signal is carried by the proper motions rather than by projected position, justifying the proper-motion-only clustering feature space adopted in Sect.~\ref{subsubsec:membership}.
 
-\begin{figure*}
-\centering
-\resizebox{\hsize}{!}{\includegraphics{Figures/pm_radec_overview.pdf}}
-\caption{Full HDBSCAN clustering panorama of the $40\,\mathrm{arcmin}$ preprocessed sample ($15276$ sources)\@. \emph{Left panel:} Proper-motion plane $(\mu_{\alpha}^{*},\mu_{\delta})$\@. \emph{Right panel:} On-sky distribution in right ascension and declination. Sources are color-coded by their HDBSCAN label: the selected NGC 6383 branch (red), the other HDBSCAN branches (blue), and the field/noise (gray); the legend lists the number of sources in each group. The proper-motion axes are clipped to the $0.5$--$99.5$ percentile range so that the cluster \DIFdelbeginFL \DIFdelFL{over-density }\DIFdelendFL \DIFaddbeginFL \DIFaddFL{overdensity }\DIFaddendFL is visible against the broad field distribution.}%
+\DIFdelbegin %DIFDELCMD < \begin{figure*}
+%DIFDELCMD < %%%
+\DIFdelendFL \DIFaddbeginFL \begin{figure}
+\DIFaddendFL \centering
+\DIFdelbeginFL %DIFDELCMD < \resizebox{\hsize}{!}{\includegraphics{Figures/pm_radec_overview.pdf}}
+%DIFDELCMD < %%%
+\DIFdelendFL \DIFaddbeginFL \includegraphics[width=\hsize,trim=0 0 507 0,clip]{Figures/pm_radec_overview.pdf}\\
+\includegraphics[width=\hsize,trim=494 0 0 0,clip]{Figures/pm_radec_overview.pdf}
+\DIFaddendFL \caption{Full HDBSCAN clustering panorama of the $40\,\mathrm{arcmin}$ preprocessed sample ($15276$ sources)\@. \DIFdelbeginFL \emph{\DIFdelFL{Left panel:}} %DIFAUXCMD
+\DIFdelendFL \DIFaddbeginFL \emph{\DIFaddFL{Top panel:}} \DIFaddendFL Proper-motion plane $(\mu_{\alpha}^{*},\mu_{\delta})$\@. \DIFdelbeginFL \emph{\DIFdelFL{Right panel:}} %DIFAUXCMD
+\DIFdelendFL \DIFaddbeginFL \emph{\DIFaddFL{Bottom panel:}} \DIFaddendFL On-sky distribution in right ascension and declination. Sources are color-coded by their HDBSCAN label: the selected NGC 6383 branch (red), the other HDBSCAN branches (blue), and the field/noise (gray); the legend lists the number of sources in each group. The proper-motion axes are clipped to the $0.5$--$99.5$ percentile range so that the cluster \DIFdelbeginFL \DIFdelFL{over-density }\DIFdelendFL \DIFaddbeginFL \DIFaddFL{overdensity }\DIFaddendFL is visible against the broad field distribution.}%
 \label{fig:pm_overview}
-\end{figure*}
+\DIFdelbeginFL %DIFDELCMD < \end{figure*}
+%DIFDELCMD < %%%
+\DIFdelend \DIFaddbegin \end{figure}
+\DIFaddend 
 
 Figure~\ref{fig:plot_pair_trace} shows the joint and marginal distributions of the four ASteCA isochrone-fit parameters together with the likelihood-scatter nuisance term\DIFaddbegin \DIFadd{, }\DIFaddend $\sigma$, sampled with the DEMetropolis ensemble (Sect.~\ref{subsec:asteca}). The marginals are single-peaked but only weakly informative: each retains a large fraction of its prior width, and the ensemble does not satisfy the convergence criteria of Sect.~\ref{subsec:cosmic}, so they should be read as a consistency check rather than as sampled posteriors. The off-diagonal panels make the classical CMD-fitting degeneracies explicit: logarithmic age correlates with both visual extinction and distance modulus, so that an older age can be partially compensated by a lower extinction or a smaller distance. Metallicity is the least constrained parameter and remains close to prior-dominated, consistent with the age--metallicity--extinction degeneracy noted in the main text. The intervals quoted for these parameters in the main text and in Table~\ref{tab:ngc6383_results} are the marginal spreads of this ensemble; for the reasons just given they are indications of scale rather than calibrated credible widths, as the notes to that table state. \DIFaddbegin \DIFadd{The term }\DIFaddend $\sigma$ is retained only as a fit nuisance parameter and carries no physical meaning.
 
@@ -635,12 +645,19 @@ This appendix collects the supplementary figures referenced from the main text: 
 		\caption{Luminosity function of NGC 6383: histogram (orange, hatched) of absolute magnitudes ($ G_{\text{abs}} $) for stars with a membership pseudo-probability of at least $0.6$.}%
 	\label{fig:lf}
 \end{figure}
-\begin{figure*}
-	\sidecaption
-	\includegraphics[width=0.6\textwidth]{Figures/real_sky.pdf}
-	\caption{Spatial distribution of probable members and members (dark-red dots) overlaid on a DSS2-red background image (shown in false color), centered on the derived cluster center marked by a blue marker. The circles are the $40\,\mathrm{arcmin}$ cone-search radius and, in increasing order of size, the fitted or derived scale radii $R_c$, $R_{\mathrm{hl}}$, $R_{\mathrm{hm}}$, $R_{\mathrm{Hill}}$, and $R_{\mathrm{bound}}$, whose values are given in the legend. The adopted King outer radius ($R_t = 54\,\mathrm{arcmin}$, Appendix~\ref{app:window}, Fig.~\ref{fig:king70}) lies just outside the displayed field and is not drawn.}%
+\DIFdelbegin %DIFDELCMD < \begin{figure*}
+%DIFDELCMD < 	\sidecaption
+%DIFDELCMD < 	\includegraphics[width=0.6\textwidth]{Figures/real_sky.pdf}
+%DIFDELCMD < 	%%%
+\DIFdelendFL \DIFaddbeginFL \begin{figure}
+	\centering
+	\includegraphics[width=\hsize]{Figures/real_sky.pdf}
+	\DIFaddendFL \caption{Spatial distribution of probable members and members (dark-red dots) overlaid on a DSS2-red background image (shown in false color), centered on the derived cluster center marked by a blue marker. The circles are the $40\,\mathrm{arcmin}$ cone-search radius and, in increasing order of size, the fitted or derived scale radii $R_c$, $R_{\mathrm{hl}}$, $R_{\mathrm{hm}}$, $R_{\mathrm{Hill}}$, and $R_{\mathrm{bound}}$, whose values are given in the legend. The adopted King outer radius ($R_t = 54\,\mathrm{arcmin}$, Appendix~\ref{app:window}, Fig.~\ref{fig:king70}) lies just outside the displayed field and is not drawn.}%
 	\label{fig:real_sky}
-\end{figure*}
+\DIFdelbeginFL %DIFDELCMD < \end{figure*}
+%DIFDELCMD < %%%
+\DIFdelend \DIFaddbegin \end{figure}
+\DIFaddend 
 
 \begin{figure*}
 	\centering
@@ -656,9 +673,11 @@ This appendix collects the supplementary figures referenced from the main text: 
 	\label{fig:mass_tseg}
 \end{figure*}
 
-\FloatBarrier
-\begin{figure}[ht]
-	\centering
+\DIFdelbegin %DIFDELCMD < \FloatBarrier
+%DIFDELCMD < \begin{figure}[ht]
+%DIFDELCMD < 	%%%
+\DIFdelendFL \DIFaddbeginFL \begin{figure}[htb]
+	\DIFaddendFL \centering
 	\resizebox{\hsize}{!}{\includegraphics{Figures/radial_velocity_amplitude.pdf}}
 	\caption{Radial velocity versus $G$ magnitude for the 29 reference-sample sources with \textit{Gaia} DR3 radial velocities. Filled circles have DR3 amplitude measurements (\texttt{rv\_amplitude\_robust}, which reflects the total amplitude in the radial-velocity time series following outlier removal) and are color-coded by amplitude (viridis color bar); open gray diamonds lack amplitude measurements. Vertical bars show the radial-velocity uncertainties.}%
 	\label{fig:radial_velocities}
