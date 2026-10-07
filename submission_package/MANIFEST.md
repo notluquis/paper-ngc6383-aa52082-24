@@ -2,7 +2,17 @@
 
 A&A ROUND-3 resubmission (minor revision, decision 2026-09; **paper accepted 2026-09-15**, this
 pass is the post-acceptance layout cleanup the editorial office asked for by email the same day).
-Compiles to 25 pp clean / 0 errors / 0 undefined refs / 0 undefined citations. The
+**2026-10-07, appendix layout after the language edit: 25 to 24 pages.** The language editor's email
+(2026-09-25) carried two requests from the Editorial Office: more compact appendices, and Fig. B.3
+displayed vertically and moved to the previous page. Fig. B.3 is now a single-column figure with its
+two panels stacked, cut from the same `pm_radec_overview.pdf` with `trim`/`clip` at the blank gap
+between panels (494 pt), and lands on p. 20; its caption reads Top/Bottom panel instead of
+Left/Right. Fig. C.3 went from `figure*` + `\sidecaption` to single column, and the `\FloatBarrier`
+before Fig. C.6 was removed (C.6 now `[htb]`). Cost, measured: Tables D.1-D.2 now print on p. 22,
+before Figs. C.4-C.6; restoring the barrier at the start of Appendix D brings back 25 pages with the
+gaps. Pages 1-17 have identical text (only the build date differs). Branch `layout-appendices`.
+
+Compiles to 24 pp clean / 0 errors / 0 undefined refs / 0 undefined citations. The
 clean count dropped from 30 pages to 27 in the post-acceptance pass: the three explicit `\clearpage`
 commands between appendices were removed, Figs. B.4 and C.3 moved to `\sidecaption` at
 `0.6\textwidth`, and Fig. C.4 was regenerated as a 1x3 row instead of a 3x1 column. A single
@@ -91,7 +101,7 @@ rewritten, a Spitzer, Jr. BibTeX name-field order fix, and the minor items liste
 repository's commit history for aa52082-24) did not move the page count on their own and also stand
 as applied.
 
-**2026-09-15, fifth pass (same review, follow-up): 26 back to 25 pp, and Table A.1 no longer needs a
+**2026-09-15, fifth pass (same review, follow-up): 26 back to 25 pages, and Table A.1 no longer needs a
 page of its own.** (ii) above passed every check that was run against it, but nobody had rendered
 p. 19 and measured *it*; the editor's "remove the empty spaces" instruction caught what the gate
 script did not. Option (iv): put Appendix A's title, its one paragraph, and Table A.1 together in a
@@ -118,7 +128,7 @@ scanned, so `\@captype` tokenizes correctly wherever it later appears inside the
 assignment survives (no group closes between the two) until `\caption` reads it. (An
 `\expandafter\def\csname @captype\endcsname{...}` form inside the argument also works, catcode-safe
 by construction, but `lacheck` flags raw `\expandafter` in a document body; the outside-the-argument
-form needs neither `\expandafter` nor `\csname` and is what shipped.) Measured result: 25 pp (one
+form needs neither `\expandafter` nor `\csname` and is what shipped.) Measured result: 25 pages (one
 less than (ii), matching the pre-review page count); p. 19 (Appendix A + Table A.1 + the first
 column of Appendix B, `whitespace.py`) 14.4% blank, down from 85.6%; pp. 20-21 (rest of Appendix B)
 8.6% and 6.8%; no appendix page gained blank space relative to the original, pre-review baseline (p.
@@ -168,7 +178,7 @@ PDF from the zip itself, so `aa52082-24_revised_clean.pdf` is **not uploaded** �
 
 | NESTOR slot | File | Notes |
 |---|---|---|
-| **Updated source files** (mandatory) | `aa52082-24_source.zip` | aa52082-24.tex (the only .tex), aa52082-24.bbl, cites.bib, aa.cls, aa.bst, linenoaa.sty, Figures/ (21, all used). Clean version only, per the editor's instruction. Verified to compile standalone in an empty directory: 25 pp, 0 errors, 0 undefined. |
+| **Updated source files** (mandatory) | `aa52082-24_source.zip` | aa52082-24.tex (the only .tex), aa52082-24.bbl, cites.bib, aa.cls, aa.bst, linenoaa.sty, Figures/ (21, all used). Clean version only, per the editor's instruction. Verified to compile standalone in an empty directory: 24 pp, 0 errors, 0 undefined. |
 | **Additional file** (optional; the exact NESTOR field name is inferred from the editor's email, "additional file", and still to be confirmed on the form) | `aa52082-24_language_edit_marked.pdf` | Round of the language edit only (2026-09-25): our changes marked in red over the language editor's `corr.tex`, uploaded so she can review them, as her email asked. Not part of the source; the zip above stays clean. |
 
 **CDS deposit is no longer a NESTOR slot.** Until 2026-09-15 this table carried a "Datasets" row
@@ -188,7 +198,7 @@ applied to the new name). It is not tracked in git, for the same reason `aa52082
 isn't: both are regenerable from tracked sources (`cds/ReadMe` + `cds/table2.dat` here, `clean_source/`
 for the .tex zip) rather than records of what a third party already received.
 
-`aa52082-24_revised_clean.pdf` (25 pp) is a local copy for checking; only the files in the table above go to NESTOR. ⚠ The archive to upload is `aa52082-24_source.zip`. A byte-identical duplicate named `clean_source.zip` used to sit beside it, referenced by nothing and documented nowhere; it was deleted on 2026-08-17, because two archives with the same contents and different names is how the stale one gets uploaded the day only one of them is rebuilt.
+`aa52082-24_revised_clean.pdf` (24 pp) is a local copy for checking; only the files in the table above go to NESTOR. ⚠ The archive to upload is `aa52082-24_source.zip`. A byte-identical duplicate named `clean_source.zip` used to sit beside it, referenced by nothing and documented nowhere; it was deleted on 2026-08-17, because two archives with the same contents and different names is how the stale one gets uploaded the day only one of them is rebuilt.
 
 ## WORKING DIRS (NOT sent, kept for our records)
 - `clean_source/`, master LaTeX source (6 source files + Figures/ 21 used). Edit here, then rebuild the zip.
