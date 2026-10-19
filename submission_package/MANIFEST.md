@@ -2,6 +2,7 @@
 
 A&A ROUND-3 resubmission (minor revision, decision 2026-09; **paper accepted 2026-09-15**, this
 pass is the post-acceptance layout cleanup the editorial office asked for by email the same day).
+**2026-10-19, final upload after the language editor's second check.** On 2026-10-08 the language editor approved the two retained wordings ("overdensity", "estimated between"), both already in the 2026-10-07 source, and asked for a regular revised upload within 7 days; the automatic reminder came on 2026-10-17. The same source (aa52082-24.tex sha256 c473e9cc...) was re-zipped from clean_source/ (the zip had not been migrated to the new machine), checked to compile from the zip alone (24 pp, 0 undefined, 0 overfull, .bbl current) and uploaded to NESTOR on 2026-10-19 as a regular revised version.
 **2026-10-07, appendix layout after the language edit: 25 to 24 pages.** The language editor's email
 (2026-09-25) carried two requests from the Editorial Office: more compact appendices, and Fig. B.3
 displayed vertically and moved to the previous page. Fig. B.3 is now a single-column figure with its
